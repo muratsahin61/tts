@@ -101,7 +101,7 @@ class TextToSpeech:
 
         if not ext:
             # Uzantı yoksa varsayılanı ekle
-            filename = filename + default_ext
+            filename = f"{filename}{default_ext}"
         elif ext.lower() not in allowed_exts:
             # Farklı/desteklenmeyen uzantı varsa uyarı bayrağı
             should_warn = True
