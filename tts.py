@@ -151,8 +151,9 @@ class TextToSpeech:
 
         try:
             if self.engine == 'gtts':
-                # gTTS ile kaydetme
-                if not filename.endswith('.mp3'):
+                # gTTS ile kaydetme - MP3 formatı
+                # Eğer dosya uzantısı yoksa .mp3 ekle
+                if not os.path.splitext(filename)[1]:
                     filename += '.mp3'
 
                 tts = self.gTTS(text=text, lang=self.language, slow=False)
@@ -161,11 +162,10 @@ class TextToSpeech:
                 return True
 
             elif self.engine == 'pyttsx3':
-                # pyttsx3 ile kaydetme
-                if not filename.endswith('.mp3'):
-                    # pyttsx3 genellikle wav formatını destekler
-                    if not filename.endswith('.wav'):
-                        filename += '.wav'
+                # pyttsx3 ile kaydetme - genellikle WAV formatı
+                # Eğer dosya uzantısı yoksa .wav ekle
+                if not os.path.splitext(filename)[1]:
+                    filename += '.wav'
 
                 self.tts_engine.save_to_file(text, filename)
                 self.tts_engine.runAndWait()

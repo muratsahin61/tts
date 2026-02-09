@@ -158,50 +158,45 @@ def main():
     print("TEXT-TO-SPEECH KULLANIM ÖRNEKLERİ")
     print("="*60)
 
+    # Tüm örnek fonksiyonlarının listesi
+    examples = [
+        ('1', example_1_basic_speech, "Basit metin okuma (gTTS)"),
+        ('2', example_2_save_to_file, "Ses dosyası olarak kaydetme"),
+        ('3', example_3_pyttsx3_offline, "Offline motor (pyttsx3)"),
+        ('4', example_4_speed_control, "Ses hızı kontrolü"),
+        ('5', example_5_english_speech, "İngilizce metin okuma"),
+        ('6', example_6_long_text, "Uzun metin okuma ve kaydetme"),
+        ('7', example_7_compare_engines, "Motor karşılaştırması"),
+        ('8', interactive_mode, "İnteraktif mod"),
+    ]
+
     print("\nHangi örneği çalıştırmak istersiniz?")
-    print("1. Basit metin okuma (gTTS)")
-    print("2. Ses dosyası olarak kaydetme")
-    print("3. Offline motor (pyttsx3)")
-    print("4. Ses hızı kontrolü")
-    print("5. İngilizce metin okuma")
-    print("6. Uzun metin okuma ve kaydetme")
-    print("7. Motor karşılaştırması")
-    print("8. İnteraktif mod")
+    for num, _, description in examples:
+        print(f"{num}. {description}")
     print("9. Tüm örnekleri çalıştır")
     print("0. Çıkış")
 
     try:
         choice = input("\nSeçiminiz (0-9): ").strip()
 
-        if choice == '1':
-            example_1_basic_speech()
-        elif choice == '2':
-            example_2_save_to_file()
-        elif choice == '3':
-            example_3_pyttsx3_offline()
-        elif choice == '4':
-            example_4_speed_control()
-        elif choice == '5':
-            example_5_english_speech()
-        elif choice == '6':
-            example_6_long_text()
-        elif choice == '7':
-            example_7_compare_engines()
-        elif choice == '8':
-            interactive_mode()
-        elif choice == '9':
-            example_1_basic_speech()
-            example_2_save_to_file()
-            example_3_pyttsx3_offline()
-            example_4_speed_control()
-            example_5_english_speech()
-            example_6_long_text()
-            example_7_compare_engines()
+        if choice == '9':
+            # Tüm örnekleri çalıştır (interaktif mod hariç)
+            for num, func, _ in examples:
+                if func != interactive_mode:
+                    func()
             print("\n✓ Tüm örnekler tamamlandı!")
         elif choice == '0':
             print("Çıkılıyor...")
         else:
-            print("Geçersiz seçim!")
+            # Seçilen örneği çalıştır
+            example_found = False
+            for num, func, _ in examples:
+                if choice == num:
+                    func()
+                    example_found = True
+                    break
+            if not example_found:
+                print("Geçersiz seçim!")
 
     except KeyboardInterrupt:
         print("\n\nProgram kullanıcı tarafından durduruldu.")
