@@ -83,6 +83,31 @@ class TextToSpeech:
         else:
             print("Uyarı: Ses hızı ayarı sadece pyttsx3 motoru için geçerlidir.")
 
+    def _validate_filename(self, filename: str, default_ext: str,
+                           allowed_exts: list) -> tuple:
+        """
+        Dosya adını doğrular ve gerekirse uzantı ekler
+
+        Args:
+            filename (str): Dosya adı
+            default_ext (str): Varsayılan uzantı (örn: '.mp3')
+            allowed_exts (list): İzin verilen uzantılar (örn: ['.mp3'])
+
+        Returns:
+            tuple: (validated_filename, should_warn)
+        """
+        name, ext = os.path.splitext(filename)
+        should_warn = False
+
+        if not ext:
+            # Uzantı yoksa varsayılanı ekle
+            filename = filename + default_ext
+        elif ext.lower() not in allowed_exts:
+            # Farklı/desteklenmeyen uzantı varsa uyarı bayrağı
+            should_warn = True
+
+        return filename, should_warn
+
     def speak(self, text: str):
         """
         Metni sesli olarak okur
@@ -152,12 +177,10 @@ class TextToSpeech:
         try:
             if self.engine == 'gtts':
                 # gTTS ile kaydetme - MP3 formatı
-                name, ext = os.path.splitext(filename)
-                if not ext:
-                    # Uzantı yoksa .mp3 ekle
-                    filename += '.mp3'
-                elif ext.lower() != '.mp3':
-                    # Farklı uzantı varsa uyarı ver
+                filename, should_warn = self._validate_filename(
+                    filename, '.mp3', ['.mp3'])
+
+                if should_warn:
                     print(f"Uyarı: gTTS sadece MP3 formatını destekler. "
                           f"Dosya {filename} olarak kaydedilecek ancak içerik MP3 olacak.")
 
@@ -168,12 +191,10 @@ class TextToSpeech:
 
             elif self.engine == 'pyttsx3':
                 # pyttsx3 ile kaydetme - genellikle WAV formatı
-                name, ext = os.path.splitext(filename)
-                if not ext:
-                    # Uzantı yoksa .wav ekle
-                    filename += '.wav'
-                elif ext.lower() not in ['.wav', '.mp3']:
-                    # Desteklenmeyen uzantı varsa uyarı ver
+                filename, should_warn = self._validate_filename(
+                    filename, '.wav', ['.wav', '.mp3'])
+
+                if should_warn:
                     print(f"Uyarı: pyttsx3 genellikle WAV veya MP3 formatını destekler. "
                           f"Dosya {filename} olarak kaydedilecek.")
 
