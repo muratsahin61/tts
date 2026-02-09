@@ -193,8 +193,10 @@ def main():
             example_1_basic_speech()
             example_2_save_to_file()
             example_3_pyttsx3_offline()
+            example_4_speed_control()
             example_5_english_speech()
             example_6_long_text()
+            example_7_compare_engines()
             print("\n✓ Tüm örnekler tamamlandı!")
         elif choice == '0':
             print("Çıkılıyor...")
